@@ -82,8 +82,8 @@ void ConvexPolygon::_polygonFill(ConvexPolygonRenderer *renderer, std::vector<ve
     // list of points to draw
     std::vector<Point3D> fillPts;
 
-    // vector for the intersection points for a given y value
-    std::vector<int> intersections;
+    // vector for the intersection x and z points for a given y value
+    std::vector<std::tuple<int, float>> intersections;
     for (auto y=minY; y<=maxY; ++y) {
         // clear out the intersections from previous y value
         intersections.clear();
@@ -93,21 +93,26 @@ void ConvexPolygon::_polygonFill(ConvexPolygonRenderer *renderer, std::vector<ve
         for (auto i=0; i<numPoints; ++i) {
             auto p1 = transformedPts[i];
             int x;
+            float z;
 
             // else if one point above y and one point below y
             if ((p0.y <= y and y <= p1.y) or (p0.y >= y and y >= p1.y)) {
                 // if horizontal line since we need to divide by y differences for parametric equation
                 if (fabs(p0.y - p1.y) < 0.001) {
                     x = int(p0.x + 0.5);
-                    intersections.push_back(x);
+                    
+                    //push both the current x and z value to the intersections list
+                    intersections.push_back(std::make_tuple(x, p0.z));
                     x = int(p1.x + 0.5);
-                    intersections.push_back(x);
+                    intersections.push_back(std::make_tuple(x, p1.z));
                 }
                 else {
                     //  use parametric equation to find intersection point
                     auto t = (y - p0.y) / (p1.y - p0.y);
                     x = int(p0.x + t * (p1.x - p0.x) + 0.5);
-                    intersections.push_back(x);
+                    z = p0.z + t * (p1.z - p0.z);
+
+                    intersections.push_back(std::make_tuple(x, z));
                 }
             }
             // move to next pair of points
@@ -117,20 +122,31 @@ void ConvexPolygon::_polygonFill(ConvexPolygonRenderer *renderer, std::vector<ve
         // fill points between the intersection points
         if (intersections.size() >= 1) {
             // may be more than two intersection points if hits vertices
-            // so find min and max x for the y
-            int minX = intersections[0];
-            int maxX = intersections[0];
+            // so find min and max x & z for the y
+            int minX = std::get<0>(intersections[0]);
+            float minZ = std::get<1>(intersections[0]);
+            
+            int maxX = std::get<0>(intersections[0]);
+            float maxZ = std::get<1>(intersections[0]);
+
+
             for (auto j=1; j<intersections.size(); ++j) {
-                if (intersections[j] < minX) {
-                    minX = intersections[j];
+                if (std::get<0>(intersections[j]) < minX) {
+                    minX = std::get<0>(intersections[j]);
+                    minZ = std::get<1>(intersections[j]);
                 }
-                else if (intersections[j] > maxX) {
-                    maxX = intersections[j];
+                else if (std::get<0>(intersections[j]) > maxX) {
+                    maxX = std::get<0>(intersections[j]);
+                    maxZ = std::get<1>(intersections[j]);
                 }
             }
             // add points to fill between them
+            float z;
             for (int x=minX; x<=maxX; ++x) {
-                fillPts.push_back(Point3D(x, y, 0.0));
+                //add z value using slope of z with percentage between min and max x
+                z = float((x - minX)) / float((maxX - minX)) * (maxZ - minZ) + minZ;
+                
+                fillPts.push_back(Point3D(x, y, z));
             }
         }
     }
@@ -140,7 +156,7 @@ void ConvexPolygon::_polygonFill(ConvexPolygonRenderer *renderer, std::vector<ve
 std::istream& operator>>(std::istream &is, ConvexPolygon &polygon) {
     std::vector<Point3D> pts;
     Point3D p;
-    float x, y, r, g, b;
+    float x, y, z, r, g, b;
     float sx, sy, tx, ty, theta;
     int numPts;
 
@@ -148,9 +164,10 @@ std::istream& operator>>(std::istream &is, ConvexPolygon &polygon) {
     is >> numPts;
     // read each point
     for (int i=0; i<numPts; ++i) {
-        is >> x >> y;
+        is >> x >> y >> z;
         p.x = x;
         p.y = y;
+        p.z = z;
         pts.push_back(p);
     }
 

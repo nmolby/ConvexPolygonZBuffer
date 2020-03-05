@@ -1,42 +1,3 @@
-//
-//  ConvexPolygonRenderer.hpp
-//  ComputerGraphics
-//
-//  Created by David M. Reed on 1/28/20.
-//  Copyright © 2020 David M Reed. All rights reserved.
-//
-
-#ifndef ConvexPolygonRenderer_hpp
-#define ConvexPolygonRenderer_hpp
-
-#include "graphics.hpp"
-#include "ConvexPolygon.hpp"
-
-class ConvexPolygonRenderer: public Renderer {
-public:
-
-    /// constructor
-    /// @param windowTitle title for window
-    /// @param width window width
-    /// @param height window height
-    ConvexPolygonRenderer(std::string windowTitle, int width, int height, std::string filename);
-
-    virtual ~ConvexPolygonRenderer() noexcept {}
-
-private:
-    std::vector<ConvexPolygon> _convexPolygons;
-};
-
-#endif /* ConvexPolygonRenderer_hpp */
-
-//
-//  Array2D.hpp
-//  Array2D
-//
-//  Created by David M. Reed on 2/19/20.
-//  Copyright © 2020 David Reed. All rights reserved.
-//
-
 #ifndef Array2D_hpp
 #define Array2D_hpp
 
@@ -92,3 +53,55 @@ inline float* Array2D::operator[](const int row) const {
 }
 
 #endif /* Array2D_hpp */
+
+
+//
+//  ConvexPolygonRenderer.hpp
+//  ComputerGraphics
+//
+//  Created by David M. Reed on 1/28/20.
+//  Copyright © 2020 David M Reed. All rights reserved.
+//
+
+#ifndef ConvexPolygonRenderer_hpp
+#define ConvexPolygonRenderer_hpp
+
+#include "graphics.hpp"
+#include "ConvexPolygon.hpp"
+
+class ConvexPolygonRenderer: public Renderer {
+public:
+
+    /// constructor
+    /// @param windowTitle title for window
+    /// @param width window width
+    /// @param height window height
+    ConvexPolygonRenderer(std::string windowTitle, int width, int height, std::string filename);
+
+    virtual ~ConvexPolygonRenderer() noexcept {}
+    
+    /// add points to be rendered
+    /// overrides parent addPoints to utilize z Buffer
+    /// @param pts vector of Point3D to render
+    /// @param color color to render each point in
+    /// @param pointSize size of each point (defaults to 1.0)
+    /// @param objectTransformation transformation to apply to each point (defaults to identity matrix)
+    /// @return position identifier for the drawable added (can be sent to removeDrawable method)
+    size_t addPoints(const std::vector<Point3D> &pts, const Color &color, float pointSize, const mat4 &objectTransformation);
+    
+private:
+    std::vector<ConvexPolygon> _convexPolygons;
+    Array2D _zBuffer;
+    
+};
+
+#endif /* ConvexPolygonRenderer_hpp */
+
+//
+//  Array2D.hpp
+//  Array2D
+//
+//  Created by David M. Reed on 2/19/20.
+//  Copyright © 2020 David Reed. All rights reserved.
+//
+

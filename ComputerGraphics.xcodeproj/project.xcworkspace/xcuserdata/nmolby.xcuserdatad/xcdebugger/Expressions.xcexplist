@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "operator&gt;&gt;(std::__1::basic_istream&lt;char, std::__1::char_traits&lt;char&gt; &gt;&amp;, ConvexPolygon&amp;):ConvexPolygon.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "ConvexPolygonRenderer::addPoints(std::__1::vector&lt;Point3D, std::__1::allocator&lt;Point3D&gt; &gt; const&amp;, Color const&amp;, float, mat4 const&amp;):ConvexPolygonRenderer.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "_zBuffer[int(point.y + .5)][int(point.x + .5)]">
+            </PersistentString>
+            <PersistentString
+               value = "point.z">
+            </PersistentString>
+            <PersistentString
+               value = "_zBuffer[100][400]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ConvexPolygonRenderer::ConvexPolygonRenderer(std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;, int, int, std::__1::basic_string&lt;char, std::__1::char_traits&lt;char&gt;, std::__1::allocator&lt;char&gt; &gt;):ConvexPolygonRenderer.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "_zBuffer[0][0]">
+            </PersistentString>
+            <PersistentString
+               value = "_zBuffer[100][400]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ConvexPolygon::_polygonFill(ConvexPolygonRenderer*, std::__1::vector&lt;vec4, std::__1::allocator&lt;vec4&gt; &gt;):ConvexPolygon.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "float((x - minX)) / float((maxX - minX))">
+            </PersistentString>
+            <PersistentString
+               value = "(x - minX) ">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
